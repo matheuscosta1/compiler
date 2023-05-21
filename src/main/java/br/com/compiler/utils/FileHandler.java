@@ -27,6 +27,7 @@ public class FileHandler {
                 characters.append(new FileCharacter(String.valueOf(character), lineCounter, columnCounter));
                 columnCounter++;
             }
+            characters.append(new FileCharacter("\n", lineCounter, columnCounter)); //Adiciona quebra de linha a cada nova linha
             lineCounter++;
         }
 

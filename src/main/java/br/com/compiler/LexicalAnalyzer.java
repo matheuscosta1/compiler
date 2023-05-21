@@ -63,7 +63,9 @@ public class LexicalAnalyzer {
                     } else if (fileCharacter.isEqualsToCharacter("}")) {
                         state = 13;
                         break;
-                    } else if (fileCharacter.isEqualsToCharacter(" ") || fileCharacter.isEqualsToCharacter("\n") || fileCharacter.isEqualsToCharacter("\t")) { //TODO: ficou faltando esse cara no diagrama
+                    } else if (fileCharacter.isEqualsToCharacter("\n")) {
+                         return new Token();
+                    } else if (fileCharacter.isEqualsToCharacter(" ") || fileCharacter.isEqualsToCharacter("\\")) { //TODO: ficou faltando esse cara no diagrama
                         state = 14;
                         break;
                     } else if (fileCharacter.isEqualsToCharacter("<")) {
@@ -72,7 +74,11 @@ public class LexicalAnalyzer {
                     } else if (fileCharacter.isEqualsToCharacter(">")) {
                         state = 17;
                         break;
+                    } else if (constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
+                        state = 27;
+                        break;
                     }
+
                     if (fileCharacter.getCharacter().equals("EOF")) { //TODO: Remover esse EOF no final de tudo
                         return new Token("EOF", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
                     }
@@ -123,6 +129,14 @@ public class LexicalAnalyzer {
                     return new Token("}", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 14 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("n") || fileCharacter.isEqualsToCharacter("t")) { // ignora /t /n
+                        return new Token();
+                    }
+
+                    characters.setLookAhead(true);
+
                     return new Token();
                 }
                 case 15 -> {
@@ -163,6 +177,76 @@ public class LexicalAnalyzer {
                 case 22 -> {
                     return new Token("RELOP", "GT", fileCharacter.getLine(), fileCharacter.getColumn()); // > (greater than)
                 }
+                case 27 -> {
+                    fileCharacter = characters.getNextCharacter();
+                    if(constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
+                        state = 27;
+                    } else if (fileCharacter.isEqualsToCharacter(".")) {
+                        state = 29;
+                    } else if (fileCharacter.isEqualsToCharacter("E")) {
+                        state = 32;
+                    } else {
+                        characters.setLookAhead(true);
+                        state = 28;
+                    }
+                }
+                case 28 -> {
+                    return new Token("setInt", "symbolTablePosition", fileCharacter.getLine(), fileCharacter.getColumn()); // > (greater than)
+                }
+                case 29 -> {
+                    fileCharacter = characters.getNextCharacter();
+                    if(constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
+                        state = 30;
+                        break;
+                    }
+                    return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn()); // > (greater than)
+                }
+                case 30 -> {
+                    fileCharacter = characters.getNextCharacter();
+                    if(constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
+                        state = 30;
+                    } else if (fileCharacter.isEqualsToCharacter("E")) {
+                        state = 32;
+                    } else {
+                        state = 31;
+                        characters.setLookAhead(true);
+                    }
+                }
+                case 31 -> {
+                    return new Token("setFrac", "symbolTablePosition", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 32 -> {
+                    fileCharacter = characters.getNextCharacter();
+                    if(fileCharacter.isEqualsToCharacter("+") || fileCharacter.isEqualsToCharacter("-")) {
+                        state = 33;
+                    } else if (constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
+                        state = 34;
+                    } else {
+                        return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
+                    }
+                }
+                case 33 -> {
+                    fileCharacter = characters.getNextCharacter();
+                    if(constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
+                        state = 34;
+                        break;
+                    }
+                    return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 34 -> {
+                    fileCharacter = characters.getNextCharacter();
+                    if(constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
+                        state = 34;
+                    } else {
+                        state = 35;
+                        characters.setLookAhead(true);
+                    }
+                }
+                case 35 -> {
+                    return new Token("setExp", "symbolTablePosition", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+
+
             }
         }
     }
