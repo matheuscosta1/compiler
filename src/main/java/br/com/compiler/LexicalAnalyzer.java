@@ -6,8 +6,6 @@ import br.com.compiler.domain.SymbolTable;
 import br.com.compiler.domain.Token;
 import br.com.compiler.utils.Constants;
 
-import java.util.List;
-
 public class LexicalAnalyzer {
 
     Constants constants = new Constants();
@@ -21,7 +19,7 @@ public class LexicalAnalyzer {
 
         int state = 0;
 
-        //characters.setLookAhead(false);
+        String symbol = "";
 
         while (true) {
             switch (state) {
@@ -76,6 +74,7 @@ public class LexicalAnalyzer {
                         break;
                     } else if (constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
                         state = 27;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
                         break;
                     }
 
@@ -179,30 +178,38 @@ public class LexicalAnalyzer {
                 }
                 case 27 -> {
                     fileCharacter = characters.getNextCharacter();
+
+                    symbol = symbol.concat(fileCharacter.getCharacter());
+
                     if(constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
                         state = 27;
                     } else if (fileCharacter.isEqualsToCharacter(".")) {
                         state = 29;
                     } else if (fileCharacter.isEqualsToCharacter("E")) {
                         state = 32;
-                    } else {
-                        characters.setLookAhead(true);
+                    } else if (!constants.isCharacterInNumbers(fileCharacter.getCharacter()) && !fileCharacter.isEqualsToCharacter(".") && !fileCharacter.isEqualsToCharacter("E")) {
                         state = 28;
+                        characters.setLookAhead(true);
+                    } else {
+                        return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
                     }
                 }
                 case 28 -> {
-                    return new Token("setInt", "symbolTablePosition", fileCharacter.getLine(), fileCharacter.getColumn()); // > (greater than)
+                    String position = symbolTable.addTable(symbol);
+                    return new Token("setInt", position, fileCharacter.getLine(), fileCharacter.getColumn()); // > (greater than)
                 }
                 case 29 -> {
                     fileCharacter = characters.getNextCharacter();
+                    symbol = symbol.concat(fileCharacter.getCharacter());
                     if(constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
                         state = 30;
                         break;
                     }
-                    return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn()); // > (greater than)
+                    return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 30 -> {
                     fileCharacter = characters.getNextCharacter();
+                    symbol = symbol.concat(fileCharacter.getCharacter());
                     if(constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
                         state = 30;
                     } else if (fileCharacter.isEqualsToCharacter("E")) {
@@ -213,10 +220,12 @@ public class LexicalAnalyzer {
                     }
                 }
                 case 31 -> {
-                    return new Token("setFrac", "symbolTablePosition", fileCharacter.getLine(), fileCharacter.getColumn());
+                    String position = symbolTable.addTable(symbol);
+                    return new Token("setFrac", position, fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 32 -> {
                     fileCharacter = characters.getNextCharacter();
+                    symbol = symbol.concat(fileCharacter.getCharacter());
                     if(fileCharacter.isEqualsToCharacter("+") || fileCharacter.isEqualsToCharacter("-")) {
                         state = 33;
                     } else if (constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
@@ -227,6 +236,7 @@ public class LexicalAnalyzer {
                 }
                 case 33 -> {
                     fileCharacter = characters.getNextCharacter();
+                    symbol = symbol.concat(fileCharacter.getCharacter());
                     if(constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
                         state = 34;
                         break;
@@ -235,18 +245,20 @@ public class LexicalAnalyzer {
                 }
                 case 34 -> {
                     fileCharacter = characters.getNextCharacter();
+                    symbol = symbol.concat(fileCharacter.getCharacter());
                     if(constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
                         state = 34;
-                    } else {
+                    } else if (!constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
                         state = 35;
                         characters.setLookAhead(true);
+                    } else {
+                        return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
                     }
                 }
                 case 35 -> {
-                    return new Token("setExp", "symbolTablePosition", fileCharacter.getLine(), fileCharacter.getColumn());
+                    String position = symbolTable.addTable(symbol);
+                    return new Token("setExp", position, fileCharacter.getLine(), fileCharacter.getColumn());
                 }
-
-
             }
         }
     }

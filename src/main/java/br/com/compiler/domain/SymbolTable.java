@@ -1,72 +1,34 @@
 package br.com.compiler.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
-public class SymbolTable {
-    private final List<Symbol> table = new ArrayList<>();
+public class SymbolTable { //TODO: na especificacao do trabalho falou sobre prencher tabela de simbolos com tipo do token, lexema, valor e tipo do dado
+    private final HashMap<String, String> table = new HashMap<>();
+    private Integer position;
 
     public SymbolTable() {
+        position = 1;
     }
 
-    public void addTable(Symbol symbol) {
-        symbol.setPosition(table.size() + 1);
-        table.add(symbol);
+    public String addTable(String symbol) {
+        if(table.get(symbol) == null) {
+            table.put(symbol, String.valueOf(position));
+            position++;
+        }
+        return table.get(symbol);
     }
 
     private String printTable() {
         StringBuilder sb = new StringBuilder();
         sb.append("Tabela de símbolos:\n\n");
-        table.forEach(symbol -> sb.append("Símbolo: ").append(symbol.name).append(" Atributo: ").append(symbol.attribute).append(" Posição: ").append(symbol.position).append("\n"));
+
+        table.forEach((symbol, position) ->  sb.append("Símbolo: ").append(symbol).append(" Atributo: ").append(position).append("\n"));
+
         return sb.toString();
     }
 
     @Override
     public String toString() {
         return printTable();
-    }
-
-    public static class Symbol {
-        private String name;
-        private String attribute;
-        private Integer position;
-
-        public Symbol(String name, String attribute) {
-            this.name = name;
-            this.attribute = attribute;
-        }
-
-        public Symbol(String name, String attribute, Integer position) {
-            this.name = name;
-            this.attribute = attribute;
-            this.position = position;
-        }
-
-        public Symbol() {
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getAttribute() {
-            return attribute;
-        }
-
-        public void setAttribute(String attribute) {
-            this.attribute = attribute;
-        }
-
-        public Integer getPosition() {
-            return position;
-        }
-
-        public void setPosition(Integer position) {
-            this.position = position;
-        }
     }
 }
