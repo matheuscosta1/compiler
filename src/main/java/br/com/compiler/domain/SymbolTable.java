@@ -11,6 +11,8 @@ public class SymbolTable { //TODO: na especificacao do trabalho falou sobre pren
     }
 
     public String addTable(String symbol) {
+        symbol = symbol.substring(0, symbol.length() -1);
+
         if(table.get(symbol) == null) {
             table.put(symbol, String.valueOf(position));
             position++;

@@ -176,7 +176,7 @@ public class LexicalAnalyzer {
                 case 22 -> {
                     return new Token("RELOP", "GT", fileCharacter.getLine(), fileCharacter.getColumn()); // > (greater than)
                 }
-                case 27 -> {
+                case 27 -> {  // etapa de reconhecimento de tokens do tipo 1 // 1. // 1E
                     fileCharacter = characters.getNextCharacter();
 
                     symbol = symbol.concat(fileCharacter.getCharacter());
@@ -196,9 +196,9 @@ public class LexicalAnalyzer {
                 }
                 case 28 -> {
                     String position = symbolTable.addTable(symbol);
-                    return new Token("setInt", position, fileCharacter.getLine(), fileCharacter.getColumn()); // > (greater than)
+                    return new Token("setInt", position, fileCharacter.getLine(), fileCharacter.getColumn());
                 }
-                case 29 -> {
+                case 29 -> { // etapa de reconhecimento de tokens do tipo 1.
                     fileCharacter = characters.getNextCharacter();
                     symbol = symbol.concat(fileCharacter.getCharacter());
                     if(constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
@@ -207,7 +207,7 @@ public class LexicalAnalyzer {
                     }
                     return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
                 }
-                case 30 -> {
+                case 30 -> { // etapa de reconhecimento de tokens do tipo 1.32
                     fileCharacter = characters.getNextCharacter();
                     symbol = symbol.concat(fileCharacter.getCharacter());
                     if(constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
@@ -223,7 +223,7 @@ public class LexicalAnalyzer {
                     String position = symbolTable.addTable(symbol);
                     return new Token("setFrac", position, fileCharacter.getLine(), fileCharacter.getColumn());
                 }
-                case 32 -> {
+                case 32 -> { // etapa de reconhecimento de tokens do tipo 1.32E
                     fileCharacter = characters.getNextCharacter();
                     symbol = symbol.concat(fileCharacter.getCharacter());
                     if(fileCharacter.isEqualsToCharacter("+") || fileCharacter.isEqualsToCharacter("-")) {
@@ -234,7 +234,7 @@ public class LexicalAnalyzer {
                         return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
                     }
                 }
-                case 33 -> {
+                case 33 -> { // etapa de reconhecimento de tokens do tipo 1.32E+1
                     fileCharacter = characters.getNextCharacter();
                     symbol = symbol.concat(fileCharacter.getCharacter());
                     if(constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
@@ -243,7 +243,7 @@ public class LexicalAnalyzer {
                     }
                     return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
                 }
-                case 34 -> {
+                case 34 -> { // etapa de reconhecimento de tokens do tipo 1.32E+1
                     fileCharacter = characters.getNextCharacter();
                     symbol = symbol.concat(fileCharacter.getCharacter());
                     if(constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
