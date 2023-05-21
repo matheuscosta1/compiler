@@ -19,7 +19,7 @@ public class FileHandler {
         String line;
 
         int lineCounter = 1;
-        int columnCounter = 0;
+        int columnCounter;
 
         while ((line = reader.readLine()) != null) {
             columnCounter = 1;

@@ -34,4 +34,8 @@ public class FileCharacter {
     public void setColumn(Integer column) {
         this.column = column;
     }
+
+    public boolean isEqualsToCharacter(String character) {
+        return getCharacter().equals(character);
+    }
 }

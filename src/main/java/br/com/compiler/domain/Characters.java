@@ -26,6 +26,7 @@ public class Characters {
         if(nextElementIndex < characters.size() && !isLookAhead()) {
             return characters.get(nextElementIndex++);
         }
+        setLookAhead(false); //se não cair no if de cima quer dizer que está em lookahead, só que o próximo token deve continuar normal, pegando o próximo caracter
         return characters.get(nextElementIndex -1);
     }
 

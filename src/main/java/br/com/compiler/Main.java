@@ -37,6 +37,10 @@ public class Main {
         while (true) {
             Token token = lexicalAnalyzer.findToken(characters);
 
+            if(token.getName() == null) {
+                continue;
+            }
+
             if(token.getName().equals("ERRO")) {
                 System.out.printf("Erro encontrado na linha %s e coluna %s", token.getLine(), token.getColumn());
                 break;
