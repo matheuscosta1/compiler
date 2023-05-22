@@ -1,0 +1,9 @@
+function meu_programa () {
+    int idade = 21;
+
+    se (idade == 21) entao {
+        idade = 21 + 1;
+    } senao {
+        idade=23-2;
+    }
+}

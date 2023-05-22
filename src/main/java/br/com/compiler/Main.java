@@ -11,7 +11,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        String fileName = "codigo.txt";
+        String fileName = "codigo2.txt";
 
         Characters characters = FileHandler.readFile(fileName);
 
@@ -21,7 +21,7 @@ public class Main {
 
 
         while (true) {
-            Token token = lexicalAnalyzer.findToken(characters);
+            Token token = lexicalAnalyzer.getToken(characters);
 
             if(token.getName() == null) {
                 continue;
@@ -45,6 +45,7 @@ public class Main {
             tokens.add(token);
 
         }
+        System.out.println("Tokens: \n");
         System.out.println(tokens);
     }
 

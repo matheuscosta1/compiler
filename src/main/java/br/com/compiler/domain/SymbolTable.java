@@ -22,7 +22,7 @@ public class SymbolTable { //TODO: na especificacao do trabalho falou sobre pren
 
     private String printTable() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Tabela de símbolos:\n\n");
+        sb.append("\n\nTabela de símbolos:\n\n");
 
         table.forEach((symbol, position) ->  sb.append("Símbolo: ").append(symbol).append(" Atributo: ").append(position).append("\n"));
 

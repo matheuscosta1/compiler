@@ -13,7 +13,7 @@ public class LexicalAnalyzer {
     public LexicalAnalyzer() {
     }
 
-    public Token findToken(Characters characters) {
+    public Token getToken(Characters characters) {
 
         FileCharacter fileCharacter = null;
 
@@ -25,66 +25,80 @@ public class LexicalAnalyzer {
             switch (state) {
                 case 0 -> {
                     fileCharacter = characters.getNextCharacter();
+
                     if (fileCharacter.isEqualsToCharacter("=")) {
                         state = 1;
-                        break;
                     } else if (fileCharacter.isEqualsToCharacter(":")) {
                         state = 3;
-                        break;
                     } else if (fileCharacter.isEqualsToCharacter("^")) {
                         state = 4;
-                        break;
                     } else if (fileCharacter.isEqualsToCharacter("/")) {
                         state = 5;
-                        break;
                     } else if (fileCharacter.isEqualsToCharacter("*")) {
                         state = 6;
-                        break;
                     } else if (fileCharacter.isEqualsToCharacter("-")) {
                         state = 7;
-                        break;
                     } else if (fileCharacter.isEqualsToCharacter("+")) {
                         state = 8;
-                        break;
                     } else if (fileCharacter.isEqualsToCharacter(";")) {
                         state = 9;
-                        break;
                     } else if (fileCharacter.isEqualsToCharacter("(")) {
                         state = 10;
-                        break;
                     } else if (fileCharacter.isEqualsToCharacter(")")) {
                         state = 11;
-                        break;
                     } else if (fileCharacter.isEqualsToCharacter("{")) {
                         state = 12;
-                        break;
                     } else if (fileCharacter.isEqualsToCharacter("}")) {
                         state = 13;
-                        break;
                     } else if (fileCharacter.isEqualsToCharacter("\n")) {
                          return new Token();
                     } else if (fileCharacter.isEqualsToCharacter(" ") || fileCharacter.isEqualsToCharacter("\\")) { //TODO: ficou faltando esse cara no diagrama
                         state = 14;
-                        break;
                     } else if (fileCharacter.isEqualsToCharacter("<")) {
                         state = 16;
-                        break;
                     } else if (fileCharacter.isEqualsToCharacter(">")) {
                         state = 17;
-                        break;
                     } else if (constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
                         state = 27;
                         symbol = symbol.concat(fileCharacter.getCharacter());
-                        break;
-                    }
-
-                    if (fileCharacter.getCharacter().equals("EOF")) { //TODO: Remover esse EOF no final de tudo
+                    } else if (fileCharacter.isEqualsToCharacter("f")) {
+                        state = 36;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (fileCharacter.isEqualsToCharacter("s")) {
+                        state = 44;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (fileCharacter.isEqualsToCharacter("e")) {
+                        state = 46;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (fileCharacter.isEqualsToCharacter("i")) {
+                        state = 51;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (fileCharacter.isEqualsToCharacter("c")) {
+                        state = 54;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (fileCharacter.isEqualsToCharacter("r")) {
+                        state = 71;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (fileCharacter.isEqualsToCharacter("a")) {
+                        state = 77;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (fileCharacter.isEqualsToCharacter("'")) {
+                        state = 83;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (fileCharacter.getCharacter().equals("EOF")) { //TODO: Remover esse EOF no final de tudo
+                        System.out.println(symbolTable);
                         return new Token("EOF", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                    } else if (constants.isCharacterNotId(fileCharacter.getCharacter())){
+                        state = 25;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
                     }
                 }
+
                 case 1 -> {
                     fileCharacter = characters.getNextCharacter();
-                    if (fileCharacter.isEqualsToCharacter("=")) {
+                    if (fileCharacter.isEqualsToCharacter("=")) { // Validação se é token do tipo ==
                         state = 2;
                     } else {
                         state = 15; //Numero de estado referente a atribuicao =
@@ -176,6 +190,22 @@ public class LexicalAnalyzer {
                 case 22 -> {
                     return new Token("RELOP", "GT", fileCharacter.getLine(), fileCharacter.getColumn()); // > (greater than)
                 }
+                case 25 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    symbol = symbol.concat(fileCharacter.getCharacter());
+
+                    if(constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25;
+                    } else {
+                        characters.setLookAhead(true);
+                        state = 26;
+                    }
+                }
+                case 26 -> {
+                    String position = symbolTable.addTable(symbol);
+                    return new Token("ID", position, fileCharacter.getLine(), fileCharacter.getColumn()); // > (greater than)
+                }
                 case 27 -> {  // etapa de reconhecimento de tokens do tipo 1 // 1. // 1E
                     fileCharacter = characters.getNextCharacter();
 
@@ -191,6 +221,7 @@ public class LexicalAnalyzer {
                         state = 28;
                         characters.setLookAhead(true);
                     } else {
+                        System.out.println(symbolTable);
                         return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
                     }
                 }
@@ -205,6 +236,7 @@ public class LexicalAnalyzer {
                         state = 30;
                         break;
                     }
+                    System.out.println(symbolTable);
                     return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 30 -> { // etapa de reconhecimento de tokens do tipo 1.32
@@ -231,6 +263,7 @@ public class LexicalAnalyzer {
                     } else if (constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
                         state = 34;
                     } else {
+                        System.out.println(symbolTable);
                         return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
                     }
                 }
@@ -241,6 +274,7 @@ public class LexicalAnalyzer {
                         state = 34;
                         break;
                     }
+                    System.out.println(symbolTable);
                     return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 34 -> { // etapa de reconhecimento de tokens do tipo 1.32E+1
@@ -252,12 +286,610 @@ public class LexicalAnalyzer {
                         state = 35;
                         characters.setLookAhead(true);
                     } else {
+                        System.out.println(symbolTable);
                         return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
                     }
                 }
                 case 35 -> {
                     String position = symbolTable.addTable(symbol);
                     return new Token("setExp", position, fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 36 -> {
+                    fileCharacter = characters.getNextCharacter();
+                    symbol = symbol.concat(fileCharacter.getCharacter());
+                    if(fileCharacter.isEqualsToCharacter("u")) { // fu
+                        state = 37;
+                    } else if (fileCharacter.isEqualsToCharacter("l")) { // fl
+                        state = 58;
+                    } else if (fileCharacter.isEqualsToCharacter("a")) { // fa
+                        state = 68;
+                    } else {
+                        state = 25; //id
+                    }
+                }
+                case 37 -> {
+                    fileCharacter = characters.getNextCharacter();
+                    symbol = symbol.concat(fileCharacter.getCharacter());
+                    if(fileCharacter.isEqualsToCharacter("n")) { // fun
+                        state = 38;
+                    } else {
+                        state = 25; //id
+                    }
+                }
+                case 38 -> {
+                    fileCharacter = characters.getNextCharacter();
+                    symbol = symbol.concat(fileCharacter.getCharacter());
+                    if(fileCharacter.isEqualsToCharacter("c")) { // func
+                        state = 39;
+                    } else {
+                        state = 25; //id
+                    }
+                }
+                case 39 -> {
+                    fileCharacter = characters.getNextCharacter();
+                    symbol = symbol.concat(fileCharacter.getCharacter());
+                    if(fileCharacter.isEqualsToCharacter("t")) { // funct
+                        state = 40;
+                    } else {
+                        state = 25; //id
+                    }
+                }
+                case 40 -> {
+                    fileCharacter = characters.getNextCharacter();
+                    symbol = symbol.concat(fileCharacter.getCharacter());
+                    if(fileCharacter.isEqualsToCharacter("i")) { // functi
+                        state = 41;
+                    } else {
+                        state = 25; //id
+                    }
+                }
+                case 41 -> {
+                    fileCharacter = characters.getNextCharacter();
+                    symbol = symbol.concat(fileCharacter.getCharacter());
+                    if(fileCharacter.isEqualsToCharacter("o")) { // functio
+                        state = 42;
+                    } else {
+                        state = 25; //id
+                    }
+                }
+                case 42 -> {
+                    fileCharacter = characters.getNextCharacter();
+                    if(fileCharacter.isEqualsToCharacter("n")) { // function
+                        state = 43;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                        state = 25; //id
+                    }
+                }
+                case 43 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                        state = 25;
+                        break;
+                    }
+
+                    characters.setLookAhead(true);
+                    return new Token("function", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 44 -> {
+                    fileCharacter = characters.getNextCharacter();
+                    if(fileCharacter.isEqualsToCharacter("e")) { // se
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                        state = 45;
+                    } else {
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                        state = 25; //id
+                    }
+                }
+                case 45 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("n")) { //sen
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                        state = 80;
+                        break;
+                    } else if(constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                        state = 25;
+                        break;
+                    }
+
+                    characters.setLookAhead(true);
+                    return new Token("se", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 46-> {
+                    fileCharacter = characters.getNextCharacter();
+                    if(fileCharacter.isEqualsToCharacter("n")) { //en
+                        state = 47;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 46;
+                    }
+                }
+                case 47-> {
+                    fileCharacter = characters.getNextCharacter();
+                    if(fileCharacter.isEqualsToCharacter("t")) { // ent
+                        state = 48;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (fileCharacter.isEqualsToCharacter("q")) { // enq
+                        state = 62;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 47;
+                    }
+                }
+                case 48-> {
+                    fileCharacter = characters.getNextCharacter();
+                    if(fileCharacter.isEqualsToCharacter("a")) { //enta
+                        state = 49;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 48;
+                    }
+                }
+                case 49-> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("o")) { //entao
+                        state = 50;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 49;
+                    }
+                }
+                case 50 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(constants.isCharacterInIDS(fileCharacter.getCharacter())) { //valida se é um id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                        state = 25;
+                        break;
+                    }
+
+                    characters.setLookAhead(true);
+                    return new Token("entao", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 51 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("n")) { //in
+                        state = 52;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 51;
+                    }
+                }
+                case 52 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("t")) { //int
+                        state = 53;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 52;
+                    }
+                }
+                case 53 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                        state = 25;
+                        break;
+                    }
+
+                    characters.setLookAhead(true);
+                    return new Token("int", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 54 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("h")) { //ch
+                        state = 55;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 54;
+                    }
+                }
+                case 55 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("a")) { //cha
+                        state = 56;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 55;
+                    }
+                }
+                case 56 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("r")) { //char
+                        state = 57;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 56;
+                    }
+                }
+                case 57 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                        state = 25;
+                        break;
+                    }
+
+                    characters.setLookAhead(true);
+                    return new Token("char", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 58 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("o")) { // flo
+                        state = 59;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 58;
+                    }
+                }
+                case 59 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("a")) { // floa
+                        state = 60;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 59;
+                    }
+                }
+                case 60 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("t")) { // float
+                        state = 61;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 60;
+                    }
+                }
+                case 61 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                        state = 25;
+                        break;
+                    }
+
+                    characters.setLookAhead(true);
+                    return new Token("float", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 62 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("u")) { // enqu
+                        state = 63;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 62;
+                    }
+                }
+                case 63 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("a")) { // enqua
+                        state = 64;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 63;
+                    }
+                }
+                case 64 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("n")) { // enquan
+                        state = 65;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 64;
+                    }
+                }
+                case 65 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("t")) { // enquant
+                        state = 66;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 65;
+                    }
+                }
+                case 66 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("o")) { // enquanto
+                        state = 67;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 65;
+                    }
+                }
+                case 67 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                        state = 25;
+                        break;
+                    }
+
+                    characters.setLookAhead(true);
+                    return new Token("enquanto", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 68 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("c")) { // fac
+                        state = 69;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 68;
+                    }
+                }
+                case 69 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("a")) { // faca
+                        state = 70;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 69;
+                    }
+                }
+                case 70 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                        state = 25;
+                        break;
+                    }
+
+                    characters.setLookAhead(true);
+                    return new Token("faca", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 71 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("e")) { // re
+                        state = 72;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 71;
+                    }
+                }
+                case 72 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("p")) { // rep
+                        state = 73;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 72;
+                    }
+                }
+                case 73 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("i")) { // repi
+                        state = 74;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 73;
+                    }
+                }
+                case 74 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("t")) { // repit
+                        state = 75;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 74;
+                    }
+                }
+                case 75 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("a")) { // repita
+                        state = 76;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 75;
+                    }
+                }
+                case 76 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                        state = 25;
+                        break;
+                    }
+
+                    characters.setLookAhead(true);
+                    return new Token("repita", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 77 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("t")) { // at
+                        state = 78;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 77;
+                    }
+                }
+                case 78 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("e")) { // ate
+                        state = 79;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 78;
+                    }
+                }
+                case 79 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                        state = 25;
+                        break;
+                    }
+
+                    characters.setLookAhead(true);
+                    return new Token("ate", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 80 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("a")) { // sena
+                        state = 81;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 80;
+                    }
+                }
+                case 81 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("o")) { // senao
+                        state = 82;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else if (constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        state = 25; //id
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    } else {
+                        state = 81;
+                    }
+                }
+                case 82 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                        state = 25;
+                        break;
+                    }
+
+                    characters.setLookAhead(true);
+                    return new Token("senao", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 83 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(!fileCharacter.isEqualsToCharacter("'")) { //
+                        state = 84;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    }
+                }
+                case 84 -> {
+                    fileCharacter = characters.getNextCharacter();
+
+                    if(fileCharacter.isEqualsToCharacter("'")) { //
+                        state = 85;
+                        symbol = symbol.concat(fileCharacter.getCharacter());
+                    }
+                }
+                case 85 -> {
+                    return new Token("senao", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
                 }
             }
         }
