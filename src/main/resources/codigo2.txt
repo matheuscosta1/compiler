@@ -1,5 +1,6 @@
 function meu_programa () {
     int idade = 21;
+    char value = 'a';
 
     se (idade == 21) entao {
         idade = 21 + 1;
