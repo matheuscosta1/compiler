@@ -87,15 +87,4 @@ public class SyntacticAnalyzer {
         token = lexicalAnalyzer.getTokenMock();
         return Objects.equals(token.getName(), "$");
     }
-
-    private static Deque<Symbol> reverseStack(Deque<Symbol> originalStack) {
-        Deque<Symbol> reversedStack = new ArrayDeque<>();
-
-        while (!originalStack.isEmpty()) {
-            Symbol item = originalStack.pop();
-            reversedStack.push(item);
-        }
-
-        return reversedStack;
-    }
 }
