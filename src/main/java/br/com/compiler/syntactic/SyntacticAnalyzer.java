@@ -52,9 +52,6 @@ public class SyntacticAnalyzer {
 
                     token = lexicalAnalyzer.getTokenMock();
 
-                    if(token.getName() == null) {
-                        token = lexicalAnalyzer.getTokenMock();
-                    }
                     //avança pro próximo filho na árvore
                 } else {
                     System.out.println("Valor esperado: " + symbol.getValue());
@@ -87,6 +84,7 @@ public class SyntacticAnalyzer {
                 }
             }
         }
+        token = lexicalAnalyzer.getTokenMock();
         return Objects.equals(token.getName(), "$");
     }
 
