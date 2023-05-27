@@ -1,0 +1,18 @@
+function meu_programa () { /* teste de comentário */
+    int idade = 21;
+    char value = 'a';
+
+    se (idade == 21) entao {
+        idade = 21 + 1;
+    } senao {
+        idade=23-2;
+    }
+
+    enquanto (idade / 2) faca {
+        idade = 23;
+    }
+
+    repita {
+        char variavel = 1.3;
+    } ate (variavel <> 3)
+}

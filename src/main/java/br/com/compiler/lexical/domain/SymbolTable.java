@@ -1,6 +1,7 @@
-package br.com.compiler.domain;
+package br.com.compiler.lexical.domain;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class SymbolTable { //TODO: na especificacao do trabalho falou sobre prencher tabela de simbolos com tipo do token, lexema, valor e tipo do dado
     private final HashMap<String, String> table = new HashMap<>();
@@ -8,6 +9,15 @@ public class SymbolTable { //TODO: na especificacao do trabalho falou sobre pren
 
     public SymbolTable() {
         position = 1;
+    }
+
+    public String getSymbol(String attribute) {
+        for (Map.Entry<String, String> stringStringEntry : table.entrySet()) {
+            if(stringStringEntry.getValue().equals(attribute)) {
+                return stringStringEntry.getKey();
+            }
+        }
+        return "";
     }
 
     public String addTable(String symbol) {

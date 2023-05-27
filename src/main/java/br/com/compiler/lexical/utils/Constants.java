@@ -1,4 +1,4 @@
-package br.com.compiler.utils;
+package br.com.compiler.lexical.utils;
 
 import java.util.Arrays;
 

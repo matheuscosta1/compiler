@@ -1,19 +1,50 @@
-package br.com.compiler;
+package br.com.compiler.lexical;
 
-import br.com.compiler.domain.Characters;
-import br.com.compiler.domain.FileCharacter;
-import br.com.compiler.domain.SymbolTable;
-import br.com.compiler.domain.Token;
-import br.com.compiler.utils.Constants;
+import br.com.compiler.lexical.domain.Characters;
+import br.com.compiler.lexical.domain.FileCharacter;
+import br.com.compiler.lexical.domain.SymbolTable;
+import br.com.compiler.lexical.domain.Token;
+import br.com.compiler.lexical.utils.Constants;
 
 public class LexicalAnalyzer {
 
     Constants constants = new Constants();
     SymbolTable symbolTable = new SymbolTable();
+    Characters characters = new Characters();
+
+    public SymbolTable getSymbolTable() {
+        return symbolTable;
+    }
+
     public LexicalAnalyzer() {
     }
 
-    public Token getToken(Characters characters) {
+    public LexicalAnalyzer(Characters characters) {
+        this.characters = characters;
+    }
+
+    public Token getTokenMock() {
+        FileCharacter fileCharacter = null;
+
+        while (true) {
+            fileCharacter = characters.getNextCharacter();
+            String symbol = "";
+
+            if(constants.isCharacterInIDS(fileCharacter.getCharacter())) {
+                symbol = fileCharacter.getCharacter();
+                String position = symbolTable.addTable(symbol+" ");
+                return new Token("ID", position, fileCharacter.getLine(), fileCharacter.getColumn()); // > (greater than)
+            } else if (fileCharacter.getCharacter().equals("$")) { //TODO: Remover esse EOF no final de tudo
+                System.out.println(symbolTable);
+                return new Token("$", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+            } else {
+                return new Token();
+            }
+
+        }
+    }
+
+    public Token getToken() {
 
         FileCharacter fileCharacter = null;
 
@@ -86,9 +117,9 @@ public class LexicalAnalyzer {
                         symbol = symbol.concat(fileCharacter.getCharacter());
                     } else if (fileCharacter.isEqualsToCharacter("'")) {
                         state = 83;
-                    } else if (fileCharacter.getCharacter().equals("EOF")) { //TODO: Remover esse EOF no final de tudo
+                    } else if (fileCharacter.getCharacter().equals("$")) { //TODO: Remover esse EOF no final de tudo
                         System.out.println(symbolTable);
-                        return new Token("EOF", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                        return new Token("$", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
                     } else if (constants.isCharacterNotId(fileCharacter.getCharacter())){
                         state = 25;
                         symbol = symbol.concat(fileCharacter.getCharacter());

@@ -1,7 +1,7 @@
-package br.com.compiler.utils;
+package br.com.compiler.lexical.utils;
 
-import br.com.compiler.domain.Characters;
-import br.com.compiler.domain.FileCharacter;
+import br.com.compiler.lexical.domain.Characters;
+import br.com.compiler.lexical.domain.FileCharacter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class FileHandler {
             lineCounter++;
         }
 
-        characters.append(new FileCharacter("EOF", ++lineCounter, 0)); //TODO: Remover esse EOF no final de tudo
+        characters.append(new FileCharacter("$", ++lineCounter, 0)); //TODO: Remover esse EOF no final de tudo
 
         return characters;
     }

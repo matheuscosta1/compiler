@@ -1,0 +1,8 @@
+P,Productions
+1,S -> A S
+2,S -> B A
+3,A -> a B
+4,A -> C
+5,B -> b A
+6,B -> d
+7,C -> c

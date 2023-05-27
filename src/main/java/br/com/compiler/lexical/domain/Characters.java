@@ -1,4 +1,4 @@
-package br.com.compiler.domain;
+package br.com.compiler.lexical.domain;
 
 import java.util.ArrayList;
 import java.util.List;

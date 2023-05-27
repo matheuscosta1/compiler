@@ -1,8 +1,8 @@
-package br.com.compiler;
+package br.com.compiler.lexical;
 
-import br.com.compiler.domain.Characters;
-import br.com.compiler.domain.Token;
-import br.com.compiler.utils.FileHandler;
+import br.com.compiler.lexical.domain.Characters;
+import br.com.compiler.lexical.domain.Token;
+import br.com.compiler.lexical.utils.FileHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,17 +11,17 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        String fileName = "codigo2.txt";
+        String fileName = "lexical/exemploSlide.txt";
 
         Characters characters = FileHandler.readFile(fileName);
 
-        LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer();
+        LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(characters);
 
         List<Token> tokens = new ArrayList<>();
 
 
         while (true) {
-            Token token = lexicalAnalyzer.getToken(characters);
+            Token token = lexicalAnalyzer.getTokenMock();
 
             if(token.getName() == null) {
                 continue;
@@ -36,7 +36,7 @@ public class Main {
                 token.setAttribute("-");
             }
 
-            if(token.getName().equals("EOF")) {
+            if(token.getName().equals("$")) {
                 break;
             }
 
