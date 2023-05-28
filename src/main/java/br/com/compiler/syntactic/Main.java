@@ -31,13 +31,12 @@ public class Main {
 
         if(result) {
             System.out.println("Programa foi aceito!\n");
-            System.out.println("Árvore Sintática gerada:\n");
-            syntacticAnalyzer.getTree().printTree("root");
         } else {
             System.out.println("\nPrograma rejeitado!");
-            System.out.println("Árvore Sintática gerada:\n");
-            syntacticAnalyzer.getTree().printTree("root");
         }
+
+        System.out.println("Árvore Sintática gerada:\n");
+        syntacticAnalyzer.getTree().printTree("root");
     }
 
 }

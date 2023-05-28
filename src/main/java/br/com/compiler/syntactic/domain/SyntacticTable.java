@@ -9,10 +9,6 @@ public class SyntacticTable {
         return table.get(derivation).get(tokenName);
     }
 
-    public HashMap<String, HashMap<String, Integer>> getTable() {
-        return table;
-    }
-
     public void setTable(HashMap<String, HashMap<String, Integer>> table) {
         this.table = table;
     }

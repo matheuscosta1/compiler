@@ -29,31 +29,16 @@ public class Symbol {
         return head;
     }
 
-    public void setHead(String head) {
-        this.head = head;
-    }
-
     public String getDerivation() {
         return derivation;
-    }
-
-    public void setDerivation(String derivation) {
-        this.derivation = derivation;
     }
 
     public boolean isTerminal() {
         return isTerminal;
     }
 
-    public void setTerminal(boolean terminal) {
-        isTerminal = terminal;
-    }
-
     public boolean isEmpty() {
         return isEmpty;
     }
 
-    public void setEmpty(boolean empty) {
-        isEmpty = empty;
-    }
 }

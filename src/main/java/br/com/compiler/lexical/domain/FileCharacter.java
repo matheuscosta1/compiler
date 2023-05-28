@@ -15,24 +15,12 @@ public class FileCharacter {
         return character;
     }
 
-    public void setCharacter(String character) {
-        this.character = character;
-    }
-
     public Integer getLine() {
         return line;
     }
 
-    public void setLine(Integer line) {
-        this.line = line;
-    }
-
     public Integer getColumn() {
         return column;
-    }
-
-    public void setColumn(Integer column) {
-        this.column = column;
     }
 
     public boolean isEqualsToCharacter(String character) {

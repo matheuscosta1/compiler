@@ -14,7 +14,4 @@ public class Production {
         return productions;
     }
 
-    public void setProductions(List<Symbol> productions) {
-        this.productions = productions;
-    }
 }

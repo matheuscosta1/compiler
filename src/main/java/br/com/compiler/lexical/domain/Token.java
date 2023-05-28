@@ -20,14 +20,9 @@ public class Token {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getAttribute() {
         return attribute;
     }
-
     public void setAttribute(String attribute) {
         this.attribute = attribute;
     }
@@ -36,16 +31,8 @@ public class Token {
         return line;
     }
 
-    public void setLine(Integer line) {
-        this.line = line;
-    }
-
     public Integer getColumn() {
         return column;
-    }
-
-    public void setColumn(Integer column) {
-        this.column = column;
     }
 
     @Override

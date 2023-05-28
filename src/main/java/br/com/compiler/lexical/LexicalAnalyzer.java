@@ -24,7 +24,7 @@ public class LexicalAnalyzer {
     }
 
     public Token getTokenMock() {
-        FileCharacter fileCharacter = null;
+        FileCharacter fileCharacter;
 
         while (true) {
             fileCharacter = characters.getNextCharacter();
@@ -33,7 +33,7 @@ public class LexicalAnalyzer {
             if(constants.isCharacterInIDS(fileCharacter.getCharacter())) {
                 symbol = fileCharacter.getCharacter();
                 String position = symbolTable.addTable(symbol+" ");
-                return new Token("ID", position, fileCharacter.getLine(), fileCharacter.getColumn()); // > (greater than)
+                return new Token("ID", position, fileCharacter.getLine(), fileCharacter.getColumn());
             } else if (fileCharacter.getCharacter().equals("$")) { //TODO: Remover esse EOF no final de tudo
                 System.out.println(symbolTable);
                 return new Token("$", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());

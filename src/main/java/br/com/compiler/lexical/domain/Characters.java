@@ -18,10 +18,6 @@ public class Characters {
         characters.add(fileCharacter);
     }
 
-    public List<FileCharacter> getCharacters() {
-        return characters;
-    }
-
     public FileCharacter getNextCharacter() {
         if(nextElementIndex < characters.size() && !isLookAhead()) {
             return characters.get(nextElementIndex++);
