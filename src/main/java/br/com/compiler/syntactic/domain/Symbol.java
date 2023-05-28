@@ -2,7 +2,7 @@ package br.com.compiler.syntactic.domain;
 
 public class Symbol {
     private String head;
-    private String value;
+    private String derivation;
     private boolean isTerminal;
     private boolean isEmpty;
 
@@ -11,16 +11,13 @@ public class Symbol {
 
     public Symbol(String head, String value, boolean isTerminal, boolean isEmpty) {
         this.head = head;
-        this.value = value;
+        this.derivation = value;
         this.isTerminal = isTerminal;
         this.isEmpty = isEmpty;
     }
 
     private String printSymbol() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Cabeça: ").append(head).append(" Valor: ").append(value).append(" Terminal: ").append(isTerminal).append(" Vazio: ").append(isEmpty).append("\n");
-
-        return sb.toString();
+        return "Cabeça: " + head + " Valor: " + derivation + " Terminal: " + isTerminal + " Vazio: " + isEmpty;
     }
 
     @Override
@@ -36,12 +33,12 @@ public class Symbol {
         this.head = head;
     }
 
-    public String getValue() {
-        return value;
+    public String getDerivation() {
+        return derivation;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setDerivation(String derivation) {
+        this.derivation = derivation;
     }
 
     public boolean isTerminal() {

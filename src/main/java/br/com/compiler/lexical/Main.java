@@ -11,7 +11,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        String fileName = "lexical/exemploSlide.txt";
+        String fileName = "lexical/codigo2.txt";
 
         Characters characters = FileHandler.readFile(fileName);
 
@@ -21,7 +21,7 @@ public class Main {
 
 
         while (true) {
-            Token token = lexicalAnalyzer.getTokenMock();
+            Token token = lexicalAnalyzer.getToken();
 
             if(token.getName() == null) {
                 continue;
