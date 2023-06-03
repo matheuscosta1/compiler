@@ -1,9 +1,6 @@
 package br.com.compiler.lexical;
 
-import br.com.compiler.lexical.domain.Characters;
-import br.com.compiler.lexical.domain.FileCharacter;
-import br.com.compiler.lexical.domain.SymbolTable;
-import br.com.compiler.lexical.domain.Token;
+import br.com.compiler.lexical.domain.*;
 import br.com.compiler.lexical.utils.Constants;
 
 public class LexicalAnalyzer {
@@ -28,12 +25,17 @@ public class LexicalAnalyzer {
 
         while (true) {
             fileCharacter = characters.getNextCharacter();
-            String symbol = "";
+            String symbol;
 
             if(constants.isCharacterInIDS(fileCharacter.getCharacter())) {
                 symbol = fileCharacter.getCharacter();
-                String position = symbolTable.addTable(symbol+" ");
-                return new Token("ID", position, fileCharacter.getLine(), fileCharacter.getColumn());
+
+                symbol= symbol + " ";
+
+                String formattedLexeme = formatSymbol(symbol);
+
+                Symbol symbol2 = symbolTable.addTable(new Symbol("caractere", formattedLexeme, formattedLexeme, "char"));
+                return new Token("ID", symbol2.getAttribute(), fileCharacter.getLine(), fileCharacter.getColumn());
             } else if (fileCharacter.getCharacter().equals("$")) { //TODO: Remover esse EOF no final de tudo
                 System.out.println(symbolTable);
                 return new Token("$", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
@@ -41,6 +43,10 @@ public class LexicalAnalyzer {
                 return new Token();
             }
         }
+    }
+
+    private static String formatSymbol(String symbol) {
+        return symbol.substring(0, symbol.length() - 1);
     }
 
     public Token getToken() {
@@ -259,9 +265,11 @@ public class LexicalAnalyzer {
                     }
                 }
                 case 28 -> {
-                    String position = symbolTable.addTable(symbol);
+                    String formattedLexeme = formatSymbol(symbol);
+
+                    Symbol tableSymbol = symbolTable.addTable(new Symbol("numero", formattedLexeme, formattedLexeme, "int"));
                     characters.setLookAhead(true);
-                    return new Token("setInt", position, fileCharacter.getLine(), fileCharacter.getColumn());
+                    return new Token("setInt", tableSymbol.getAttribute(), fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 29 -> { // etapa de reconhecimento de tokens do tipo 1.
                     fileCharacter = characters.getNextCharacter();
@@ -285,9 +293,10 @@ public class LexicalAnalyzer {
                     }
                 }
                 case 31 -> {
-                    String position = symbolTable.addTable(symbol);
+                    String formattedLexeme = formatSymbol(symbol);
+                    Symbol tableSymbol = symbolTable.addTable(new Symbol("numero", formattedLexeme, formattedLexeme, "float"));
                     characters.setLookAhead(true);
-                    return new Token("setFraction", position, fileCharacter.getLine(), fileCharacter.getColumn());
+                    return new Token("setFraction", tableSymbol.getAttribute(), fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 32 -> { // etapa de reconhecimento de tokens do tipo 1.32E
                     fileCharacter = characters.getNextCharacter();
@@ -324,9 +333,10 @@ public class LexicalAnalyzer {
                     }
                 }
                 case 35 -> {
-                    String position = symbolTable.addTable(symbol);
+                    String formattedLexeme = formatSymbol(symbol);
+                    Symbol tableSymbol = symbolTable.addTable(new Symbol("numero", formattedLexeme, String.valueOf(Float.parseFloat(formattedLexeme)), "float"));
                     characters.setLookAhead(true);
-                    return new Token("setFloat", position, fileCharacter.getLine(), fileCharacter.getColumn());
+                    return new Token("setFloat", tableSymbol.getAttribute(), fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 36 -> {
                     fileCharacter = characters.getNextCharacter();
@@ -995,14 +1005,16 @@ public class LexicalAnalyzer {
                     return new Token("/", "DIV", fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 103 -> {
-                    String position = symbolTable.addTable(symbol);
+                    String formattedLexeme = formatSymbol(symbol);
+                    Symbol tableSymbol = symbolTable.addTable(new Symbol("caracter", formattedLexeme, formattedLexeme, "char"));
                     characters.setLookAhead(true);
-                    return new Token("caracter", position, fileCharacter.getLine(), fileCharacter.getColumn());
+                    return new Token("caracter", tableSymbol.getAttribute(), fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 104 -> {
-                    String position = symbolTable.addTable(symbol);
+                    String formattedLexeme = formatSymbol(symbol);
+                    Symbol tableSymbol = symbolTable.addTable(new Symbol("identtificador", formattedLexeme, "-", "-"));
                     characters.setLookAhead(true);
-                    return new Token("ID", position, fileCharacter.getLine(), fileCharacter.getColumn());
+                    return new Token("ID", tableSymbol.getAttribute(), fileCharacter.getLine(), fileCharacter.getColumn());
                 }
             }
         }

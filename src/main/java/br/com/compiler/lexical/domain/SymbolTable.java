@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SymbolTable { //TODO: na especificacao do trabalho falou sobre prencher tabela de simbolos com tipo do token, lexema, valor e tipo do dado
-    private final HashMap<String, String> table = new HashMap<>();
+    private final HashMap<String, Symbol> table = new HashMap<>();
     private Integer position;
 
     public SymbolTable() {
@@ -12,29 +12,28 @@ public class SymbolTable { //TODO: na especificacao do trabalho falou sobre pren
     }
 
     public String getSymbol(String attribute) {
-        for (Map.Entry<String, String> stringStringEntry : table.entrySet()) {
-            if(stringStringEntry.getValue().equals(attribute)) {
+        for (Map.Entry<String, Symbol> stringStringEntry : table.entrySet()) {
+            if(stringStringEntry.getValue().getAttribute().equals(attribute)) {
                 return stringStringEntry.getKey();
             }
         }
         return "";
     }
 
-    public String addTable(String symbol) {
-        symbol = symbol.substring(0, symbol.length() - 1);
-
-        if(table.get(symbol) == null) {
-            table.put(symbol, String.valueOf(position));
+    public Symbol addTable(Symbol symbol) {
+        if(table.get(symbol.getLexeme()) == null) {
+            symbol.setAttribute(String.valueOf(position));
+            table.put(symbol.getLexeme(), symbol);
             position++;
         }
-        return table.get(symbol);
+        return table.get(symbol.getLexeme());
     }
 
     private String printTable() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n\nTabela de símbolos:\n\n");
 
-        table.forEach((symbol, position) ->  sb.append("Símbolo: ").append(symbol).append(" Atributo: ").append(position).append("\n"));
+        table.forEach((key, value) ->  sb.append("Símbolo: ").append(key).append(" Tipo do Token: ").append(value.getTokenType()).append(" Lexema: ").append(value.getLexeme()).append(" Valor: ").append(value.getValue()).append(" Tipo dado: ").append(value.getDataType()).append("\n"));
 
         return sb.toString();
     }

@@ -3,6 +3,8 @@ function meu_programa () { /* teste de comentário */
     int idade = 21;
     char value = 'a';
     int a = 2;
+    float valor = 12E+1;
+    float valor1 = 1.32E+1;
 
     se (idade == 21) entao {
         idade = 21 + 1;
