@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class SyntacticTable {
     HashMap<String, HashMap<String, Integer>> table = new HashMap<>();
 
-    public Integer getProductionDerivation(String derivation, String tokenName) {
+    public Integer getProductionPositionBySymbolDerivationAndToken(String derivation, String tokenName) {
         return table.get(derivation).get(tokenName);
     }
 

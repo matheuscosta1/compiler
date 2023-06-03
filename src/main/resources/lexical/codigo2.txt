@@ -1,6 +1,8 @@
+char value = 'a';\t\n
 function meu_programa () { /* teste de comentário */
     int idade = 21;
     char value = 'a';
+    int a = 2;
 
     se (idade == 21) entao {
         idade = 21 + 1;

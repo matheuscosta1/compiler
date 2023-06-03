@@ -40,7 +40,6 @@ public class LexicalAnalyzer {
             } else {
                 return new Token();
             }
-
         }
     }
 
@@ -134,7 +133,6 @@ public class LexicalAnalyzer {
                         state = 2;
                     } else {
                         state = 15; //Numero de estado referente a atribuicao =
-                        characters.setLookAhead(true);
                     }
                 }
                 case 2 -> {
@@ -152,8 +150,8 @@ public class LexicalAnalyzer {
                         state = 86;
                         break;
                     }
-                    characters.setLookAhead(true);
-                    return new Token("/", "DIV", fileCharacter.getLine(), fileCharacter.getColumn());
+
+                    state = 102;
                 }
                 case 6 -> {
                     return new Token("*", "MUL", fileCharacter.getLine(), fileCharacter.getColumn());
@@ -182,15 +180,15 @@ public class LexicalAnalyzer {
                 case 14 -> {
                     fileCharacter = characters.getNextCharacter();
 
-                    if(fileCharacter.isEqualsToCharacter("n") || fileCharacter.isEqualsToCharacter("t")) { // ignora /t /n
-                        return new Token();
+                    if(fileCharacter.isEqualsToCharacter("n") || fileCharacter.isEqualsToCharacter("t") || fileCharacter.isEqualsToCharacter("\\") || fileCharacter.isEqualsToCharacter(" ")) { // ignora /t /n
+                        state = 14;
+                        break;
                     }
 
-                    characters.setLookAhead(true);
-
-                    return new Token();
+                    state = 101;
                 }
                 case 15 -> {
+                    characters.setLookAhead(true);
                     return new Token("=", "ATR", fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 16 -> {
@@ -200,8 +198,7 @@ public class LexicalAnalyzer {
                     } else if (fileCharacter.isEqualsToCharacter(">")) {
                         state = 19; // <> (not equals)
                     } else {
-                        characters.setLookAhead(true); // < (less than)
-                        state = 20;
+                        state = 20; // < (less than)
                     }
                 }
                 case 17 -> {
@@ -210,7 +207,6 @@ public class LexicalAnalyzer {
                         state = 21; // >=
                     } else {
                         state = 22; // >
-                        characters.setLookAhead(true);
                     }
                 }
                 case 18 -> {
@@ -220,16 +216,18 @@ public class LexicalAnalyzer {
                     return new Token("RELOP", "NE", fileCharacter.getLine(), fileCharacter.getColumn()); // <> (not equals)
                 }
                 case 20 -> {
+                    characters.setLookAhead(true);
                     return new Token("RELOP", "LT", fileCharacter.getLine(), fileCharacter.getColumn()); // < (less than)
                 }
                 case 21 -> {
                     return new Token("RELOP", "GE", fileCharacter.getLine(), fileCharacter.getColumn()); // >= (greater equals)
                 }
                 case 22 -> {
+                    characters.setLookAhead(true);
                     return new Token("RELOP", "GT", fileCharacter.getLine(), fileCharacter.getColumn()); // > (greater than)
                 }
                 case 23 -> {
-                    return new Token(",", "NULL", fileCharacter.getLine(), fileCharacter.getColumn()); // > (greater than)
+                    return new Token(",", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 25 -> {
                     fileCharacter = characters.getNextCharacter();
@@ -239,13 +237,8 @@ public class LexicalAnalyzer {
                     if(constants.isCharacterInIDS(fileCharacter.getCharacter())) {
                         state = 25;
                     } else {
-                        characters.setLookAhead(true);
-                        state = 26;
+                        state = 104;
                     }
-                }
-                case 26 -> {
-                    String position = symbolTable.addTable(symbol);
-                    return new Token("ID", position, fileCharacter.getLine(), fileCharacter.getColumn()); // > (greater than)
                 }
                 case 27 -> {  // etapa de reconhecimento de tokens do tipo 1 // 1. // 1E
                     fileCharacter = characters.getNextCharacter();
@@ -260,7 +253,6 @@ public class LexicalAnalyzer {
                         state = 32;
                     } else if (!constants.isCharacterInNumbers(fileCharacter.getCharacter()) && !fileCharacter.isEqualsToCharacter(".") && !fileCharacter.isEqualsToCharacter("E")) {
                         state = 28;
-                        characters.setLookAhead(true);
                     } else {
                         System.out.println(symbolTable);
                         return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
@@ -268,6 +260,7 @@ public class LexicalAnalyzer {
                 }
                 case 28 -> {
                     String position = symbolTable.addTable(symbol);
+                    characters.setLookAhead(true);
                     return new Token("setInt", position, fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 29 -> { // etapa de reconhecimento de tokens do tipo 1.
@@ -289,11 +282,11 @@ public class LexicalAnalyzer {
                         state = 32;
                     } else {
                         state = 31;
-                        characters.setLookAhead(true);
                     }
                 }
                 case 31 -> {
                     String position = symbolTable.addTable(symbol);
+                    characters.setLookAhead(true);
                     return new Token("setFraction", position, fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 32 -> { // etapa de reconhecimento de tokens do tipo 1.32E
@@ -325,7 +318,6 @@ public class LexicalAnalyzer {
                         state = 34;
                     } else if (!constants.isCharacterInNumbers(fileCharacter.getCharacter())) {
                         state = 35;
-                        characters.setLookAhead(true);
                     } else {
                         System.out.println(symbolTable);
                         return new Token("ERRO", "ERRO", fileCharacter.getLine(), fileCharacter.getColumn());
@@ -333,6 +325,7 @@ public class LexicalAnalyzer {
                 }
                 case 35 -> {
                     String position = symbolTable.addTable(symbol);
+                    characters.setLookAhead(true);
                     return new Token("setFloat", position, fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 36 -> {
@@ -412,8 +405,7 @@ public class LexicalAnalyzer {
                         break;
                     }
 
-                    characters.setLookAhead(true);
-                    return new Token("function", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                    state = 90;
                 }
                 case 44 -> {
                     fileCharacter = characters.getNextCharacter();
@@ -438,8 +430,7 @@ public class LexicalAnalyzer {
                         break;
                     }
 
-                    characters.setLookAhead(true);
-                    return new Token("se", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                    state = 93;
                 }
                 case 46-> {
                     fileCharacter = characters.getNextCharacter();
@@ -502,8 +493,7 @@ public class LexicalAnalyzer {
                         break;
                     }
 
-                    characters.setLookAhead(true);
-                    return new Token("entao", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                    state = 95;
                 }
                 case 51 -> {
                     fileCharacter = characters.getNextCharacter();
@@ -540,8 +530,7 @@ public class LexicalAnalyzer {
                         break;
                     }
 
-                    characters.setLookAhead(true);
-                    return new Token("int", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                    state = 97;
                 }
                 case 54 -> {
                     fileCharacter = characters.getNextCharacter();
@@ -591,8 +580,7 @@ public class LexicalAnalyzer {
                         break;
                     }
 
-                    characters.setLookAhead(true);
-                    return new Token("char", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                    state = 98;
                 }
                 case 58 -> {
                     fileCharacter = characters.getNextCharacter();
@@ -642,8 +630,7 @@ public class LexicalAnalyzer {
                         break;
                     }
 
-                    characters.setLookAhead(true);
-                    return new Token("float", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                    state = 91;
                 }
                 case 62 -> {
                     fileCharacter = characters.getNextCharacter();
@@ -719,8 +706,7 @@ public class LexicalAnalyzer {
                         break;
                     }
 
-                    characters.setLookAhead(true);
-                    return new Token("enquanto", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                    state = 96;
                 }
                 case 68 -> {
                     fileCharacter = characters.getNextCharacter();
@@ -756,9 +742,7 @@ public class LexicalAnalyzer {
                         state = 25;
                         break;
                     }
-
-                    characters.setLookAhead(true);
-                    return new Token("faca", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                    state = 92;
                 }
                 case 71 -> {
                     fileCharacter = characters.getNextCharacter();
@@ -834,8 +818,7 @@ public class LexicalAnalyzer {
                         break;
                     }
 
-                    characters.setLookAhead(true);
-                    return new Token("repita", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                    state = 99;
                 }
                 case 77 -> {
                     fileCharacter = characters.getNextCharacter();
@@ -847,7 +830,7 @@ public class LexicalAnalyzer {
                         state = 25; //id
                         symbol = symbol.concat(fileCharacter.getCharacter());
                     } else {
-                        state = 77;
+                        state = 25;
                     }
                 }
                 case 78 -> {
@@ -872,8 +855,7 @@ public class LexicalAnalyzer {
                         break;
                     }
 
-                    characters.setLookAhead(true);
-                    return new Token("ate", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                    state = 100;
                 }
                 case 80 -> {
                     fileCharacter = characters.getNextCharacter();
@@ -910,8 +892,7 @@ public class LexicalAnalyzer {
                         break;
                     }
 
-                    characters.setLookAhead(true);
-                    return new Token("senao", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                    state = 94;
                 }
                 case 83 -> {
                     fileCharacter = characters.getNextCharacter();
@@ -932,8 +913,8 @@ public class LexicalAnalyzer {
                     }
                 }
                 case 85 -> {
-                    String position = symbolTable.addTable(symbol);
-                    return new Token("caracter", position, fileCharacter.getLine(), fileCharacter.getColumn());
+                    fileCharacter = characters.getNextCharacter();
+                    state = 103;
                 }
                 case 86 -> {
                     fileCharacter = characters.getNextCharacter();
@@ -949,8 +930,79 @@ public class LexicalAnalyzer {
                     fileCharacter = characters.getNextCharacter();
 
                     if(fileCharacter.isEqualsToCharacter("/")) {
-                        return new Token();
+                        state = 88;
                     }
+                }
+                case 88 -> {
+                    fileCharacter = characters.getNextCharacter();
+                    if(!fileCharacter.isEqualsToCharacter("/")) {
+                        state = 89;
+                    }
+                }
+                case 89 -> {
+                    return new Token();
+                }
+                case 90 -> {
+                    characters.setLookAhead(true);
+                    return new Token("function", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 91 -> {
+                    characters.setLookAhead(true);
+                    return new Token("float", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 92 -> {
+                    characters.setLookAhead(true);
+                    return new Token("faca", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 93 -> {
+                    characters.setLookAhead(true);
+                    return new Token("se", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 94 -> {
+                    characters.setLookAhead(true);
+                    return new Token("senao", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 95 -> {
+                    characters.setLookAhead(true);
+                    return new Token("entao", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 96 -> {
+                    characters.setLookAhead(true);
+                    return new Token("enquanto", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 97 -> {
+                    characters.setLookAhead(true);
+                    return new Token("int", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 98 -> {
+                    characters.setLookAhead(true);
+                    return new Token("char", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 99 -> {
+                    characters.setLookAhead(true);
+                    return new Token("repita", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 100 -> {
+                    characters.setLookAhead(true);
+                    return new Token("ate", "NULL", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 101 -> {
+                    characters.setLookAhead(true);
+                    return new Token();
+                }
+                case 102 -> {
+                    characters.setLookAhead(true);
+                    return new Token("/", "DIV", fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 103 -> {
+                    String position = symbolTable.addTable(symbol);
+                    characters.setLookAhead(true);
+                    return new Token("caracter", position, fileCharacter.getLine(), fileCharacter.getColumn());
+                }
+                case 104 -> {
+                    String position = symbolTable.addTable(symbol);
+                    characters.setLookAhead(true);
+                    return new Token("ID", position, fileCharacter.getLine(), fileCharacter.getColumn());
                 }
             }
         }

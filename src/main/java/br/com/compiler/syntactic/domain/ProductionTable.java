@@ -10,7 +10,7 @@ public class ProductionTable {
         table.put(position, production);
     }
 
-    public List<Symbol> getProductions(Integer position) {
+    public List<Symbol> getProductionsByPosition(Integer position) {
         Production production = table.get(position);
         return production.productions;
     }

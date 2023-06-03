@@ -18,7 +18,7 @@ public class SyntacticAnalyzer {
     }
 
     public boolean process(SyntacticTable syntacticTable, ProductionTable productionTable, LexicalAnalyzer lexicalAnalyzer) {
-        List<Symbol> productions1 = productionTable.getProductions(1);
+        List<Symbol> productions1 = productionTable.getProductionsByPosition(1);
 
         Symbol symbol1 = productions1.stream().findFirst().get();
 
@@ -76,13 +76,12 @@ public class SyntacticAnalyzer {
                 token = lexicalAnalyzer.getTokenMock();
             } else {
                 String symbolDerivation = symbol.getDerivation(); //symbolDerivation indica os não terminais na tabela
-                Integer productionDerivation = syntacticTable.getProductionDerivation(symbolDerivation, productionTokenName); //productionTokenName indica a coluna dos terminais na tabela
+                Integer productionDerivation = syntacticTable.getProductionPositionBySymbolDerivationAndToken(symbolDerivation, productionTokenName); //productionTokenName indica a coluna dos terminais na tabela
                 if (productionDerivation == null) {
                     System.out.println("Erro: derivação [" + symbol.getDerivation() + "]["+ productionTokenName +"] - " + null);
                     break;
                 } else {
-                    //trata producao
-                    List<Symbol> productions = productionTable.getProductions(productionDerivation);
+                    List<Symbol> productions = productionTable.getProductionsByPosition(productionDerivation);
 
                     for (Symbol production : productions) {
                         tree.addChild(production.getHead(), production.getDerivation());
