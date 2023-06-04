@@ -4,12 +4,29 @@ import java.util.*;
 
 public class Tree {
     private String name;
+    private String attribute;
     private final List<Tree> children = new ArrayList<>();
 
     private final Map<String, Tree> nodeMap = new HashMap<>();
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
+    }
 
     public Tree() {
+    }
+
+    public Tree(String name, String attribute) {
+        this.name = name;
+        this.attribute = attribute;
     }
 
     public Tree(String name) {
@@ -20,14 +37,14 @@ public class Tree {
         children.add(child);
     }
 
-    public void addChild(String parentName, String childName) {
+    public void addChild(String parentName, String childName, String attribute) {
         Tree parent = nodeMap.get(parentName);
         if (parent == null) {
             parent = new Tree(parentName);
             nodeMap.put(parentName, parent);
         }
 
-        Tree child = new Tree(childName);
+        Tree child = new Tree(childName, attribute);
         parent.addChild(child);
         nodeMap.put(childName, child);
     }

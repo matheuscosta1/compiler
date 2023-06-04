@@ -11,13 +11,32 @@ public class SymbolTable { //TODO: na especificacao do trabalho falou sobre pren
         position = 1;
     }
 
-    public String getSymbol(String attribute) {
+    public String getSymbolValue(String attribute) {
         for (Map.Entry<String, Symbol> stringStringEntry : table.entrySet()) {
             if(stringStringEntry.getValue().getAttribute().equals(attribute)) {
                 return stringStringEntry.getKey();
             }
         }
         return "";
+    }
+
+
+    public Symbol getSymbol(String attribute) {
+        for (Map.Entry<String, Symbol> stringStringEntry : table.entrySet()) {
+            if(stringStringEntry.getValue().getAttribute().equals(attribute)) {
+                return stringStringEntry.getValue();
+            }
+        }
+        return new Symbol();
+    }
+
+    public boolean isSymbolOnTable(String attribute) {
+        for (Map.Entry<String, Symbol> stringStringEntry : table.entrySet()) {
+            if(stringStringEntry.getValue().getAttribute().equals(attribute)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Symbol addTable(Symbol symbol) {
@@ -33,7 +52,7 @@ public class SymbolTable { //TODO: na especificacao do trabalho falou sobre pren
         StringBuilder sb = new StringBuilder();
         sb.append("\n\nTabela de símbolos:\n\n");
 
-        table.forEach((key, value) ->  sb.append("Símbolo: ").append(key).append(" Tipo do Token: ").append(value.getTokenType()).append(" Lexema: ").append(value.getLexeme()).append(" Valor: ").append(value.getValue()).append(" Tipo dado: ").append(value.getDataType()).append("\n"));
+        table.forEach((key, value) ->  sb.append("Símbolo: ").append(key).append(" Tipo do Token: ").append(value.getTokenType()).append(" Lexema: ").append(value.getLexeme()).append(" Valor: ").append(value.getValue()).append(" Tipo dado: ").append(value.getDataType()).append(" Atributo: ").append(value.getAttribute()).append("\n"));
 
         return sb.toString();
     }

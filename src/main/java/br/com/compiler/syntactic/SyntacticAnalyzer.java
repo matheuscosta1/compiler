@@ -35,7 +35,9 @@ public class SyntacticAnalyzer {
 
             if(token.getName() != null) {
                 if(!token.getAttribute().equals("-")) {
-                    productionTokenName = lexicalAnalyzer.getSymbolTable().getSymbol(token.getAttribute()); //consulta tabela de simbolos para pegar nome do atributo do token
+                    productionTokenName = lexicalAnalyzer.getSymbolTable().getSymbolValue(token.getAttribute()); //consulta tabela de simbolos para pegar nome do atributo do token
+                } else {
+                    productionTokenName = token.getName();
                 }
             }
 
@@ -84,7 +86,7 @@ public class SyntacticAnalyzer {
                     List<Symbol> productions = productionTable.getProductionsByPosition(productionDerivation);
 
                     for (Symbol production : productions) {
-                        tree.addChild(production.getHead(), production.getDerivation());
+                        tree.addChild(production.getHead(), production.getDerivation(), token.getAttribute()); //TODO: Validar se o atributto tem que ser settado só quando é um identificador
                     }
 
                     symbol = stack.removeLast();

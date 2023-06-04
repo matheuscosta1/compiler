@@ -8,7 +8,6 @@ public class Symbol { //TODO: na especificacao do trabalho falou sobre prencher 
     private String lexeme;
     private String value;
     private String dataType;
-
     private String attribute;
 
     public String getAttribute() {
@@ -17,6 +16,9 @@ public class Symbol { //TODO: na especificacao do trabalho falou sobre prencher 
 
     public void setAttribute(String attribute) {
         this.attribute = attribute;
+    }
+
+    public Symbol() {
     }
 
     public Symbol(String tokenType, String lexeme, String value, String dataType) {
