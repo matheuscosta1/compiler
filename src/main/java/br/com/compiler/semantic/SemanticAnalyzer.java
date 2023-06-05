@@ -18,7 +18,7 @@ public class SemanticAnalyzer {
     private void analyzeFunction(Tree node) {
         String nodeName = node.getName();
 
-        if (nodeName.equals("nome_programa")) {
+        if (nodeName.equals("S")) {
             // Faça algo com o nome do programa
 
             Tree blockNode = node.getChildren().get(0);
@@ -161,7 +161,7 @@ public class SemanticAnalyzer {
 
         Tree tree = syntacticAnalyzer.getTree();
 
-        Tree root = tree.getRoot("root");
+        Tree root = tree.getRoot("S");
 
         analyze(root);
 

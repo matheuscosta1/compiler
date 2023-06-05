@@ -63,8 +63,10 @@ public class SyntacticAnalyzer {
                     System.out.println(dequeueSymbol);
                     System.out.println("---------------------------------------------------------\n");
                     token = lexicalAnalyzer.getToken();
+
                 } else {
                     System.out.println("Valor esperado: " + symbol.getDerivation());
+                    System.out.println("Token: " + token.getName() + " Linha: " + token.getLine() + " Coluna: " + token.getColumn());
                     return false;
                 }
             } else if (symbol.isEmpty()) {
@@ -74,16 +76,14 @@ public class SyntacticAnalyzer {
                 System.out.println("\nSimbolo desempilhado: \n");
                 System.out.println(dequeueSymbol);
                 System.out.println("---------------------------------------------------------\n");
-
-                if(token.getName().equals(";") && dequeueSymbol.getHead().equals("SEQUENCIA_COMANDOS")) {
+                if(token.getName().equals(";") && dequeueSymbol.getHead().equals("EXPRESSAO'")) {
                     token = lexicalAnalyzer.getToken();
                 }
-
             } else {
                 String symbolDerivation = symbol.getDerivation(); //symbolDerivation indica os não terminais na tabela
                 Integer productionDerivation = syntacticTable.getProductionPositionBySymbolDerivationAndToken(symbolDerivation, token.getName()); //productionTokenName indica a coluna dos terminais na tabela
                 if (productionDerivation == null) {
-                    System.out.println("Erro: derivação [" + symbol.getDerivation() + "]["+ productionTokenName +"] - " + null);
+                    System.out.println("Erro: derivação [" + symbol.getDerivation() + "]["+ token.getName() +"] - " + null);
                     System.out.println("Token: " + token.getName() + " Linha: " + token.getLine() + " Coluna: " + token.getColumn());
                     System.exit(1);
                 } else {
@@ -103,10 +103,6 @@ public class SyntacticAnalyzer {
                 }
             }
         }
-
-        do {
-            char teste;
-        } while (token.getName() != null);
 
         token = lexicalAnalyzer.getToken();
 

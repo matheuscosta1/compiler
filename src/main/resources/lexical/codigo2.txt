@@ -3,6 +3,11 @@ function meu_programa () { /* teste de comentário */
     char: value;
     int: abobrinha;
     float: valor;
+    float: value1, value2, value3;
+
+    abobrinha = 1E9;
+    abobrinha1 = 1E9;
+    abobrinha2 = 1E9;
 
     se (idade == 30) entao {
         idade = 21 + 1;
@@ -22,4 +27,23 @@ function meu_programa () { /* teste de comentário */
         char: variavel;
         idade=23-2;
     } ate (variavel <> 3)
+
+    se (value1 > value2) entao {
+        value3 = value1 / value2;
+    } senao {
+        value3 = value1 * value2;
+    }
+
+    repita {
+        value1 = value1 - 2.5;
+    } ate (value1 <= value2)
+
+    repita {
+        value3 = value2 ^ 2;
+    } ate (value3 >= 100)
+
+    /* abobrinha = 12E+1; */
+    /* abobrinha = 1E9; */
+    /* abobrinha = 1E+9; */
+    /* value3 = 1.32E-12; */
 }

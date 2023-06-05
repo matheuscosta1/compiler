@@ -39,7 +39,7 @@ public class Main {
 
             Tree tree = syntacticAnalyzer.getTree();
 
-            tree.printTree("root");
+            tree.printTree("S");
 
             semanticAnalyzer.process(lexicalAnalyzer, syntacticAnalyzer);
 
