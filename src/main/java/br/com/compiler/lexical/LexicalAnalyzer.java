@@ -981,9 +981,9 @@ public class LexicalAnalyzer {
                 }
                 case 103 -> {
                     String formattedLexeme = formatSymbol(symbol);
-                    Symbol tableSymbol = symbolTable.addTable(new Symbol("caracter", formattedLexeme, formattedLexeme, "char"));
+                    Symbol tableSymbol = symbolTable.addTable(new Symbol("caractere", formattedLexeme, formattedLexeme, "char"));
                     characters.setLookAhead(true);
-                    return new Token("caracter", tableSymbol.getAttribute(), fileCharacter.getLine(), fileCharacter.getColumn());
+                    return new Token("caractere", tableSymbol.getAttribute(), fileCharacter.getLine(), fileCharacter.getColumn());
                 }
                 case 104 -> {
                     String formattedLexeme = formatSymbol(symbol);
