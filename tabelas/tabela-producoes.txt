@@ -1,0 +1,43 @@
+1: S -> function identificador () bloco
+2: bloco -> { declaracoes_variaveis sequencia_comandos }
+3: declaracoes_variaveis -> ε
+4: declaracoes_variaveis -> tipo : lista_ids ; declaracoes_variaveis
+5: lista_ids -> identificador lista_ids'
+6: lista_ids' -> , identificador lista_ids'
+7: lista_ids' -> ε
+8: sequencia_comandos -> ε
+9: sequencia_comandos -> comando sequencia_comandos
+10: comando -> selecao
+11: comando -> laco_repita
+12: comando -> laco_enquanto
+13: comando -> atribuicao
+14: selecao -> se ( condicao ) entao estrutura selecao'
+15: selecao' -> senao estrutura
+16: selecao' -> ε
+17: laco_enquanto -> enquanto ( condicao ) faca estrutura
+18: laco_repita -> repita estrutura ate ( condicao )
+19: atribuicao -> identificador = expressao ;
+20: condicao -> expressao operador_relacional expressao
+21: termo -> identificador
+22: termo -> constante
+23: expressao -> termo expressao'
+24: expressao' -> operador_aritmetico termo expressao'
+25: expressao' -> ε
+26: constante -> numero
+27: constante -> caractere
+28: tipo -> char
+29: tipo -> int
+30: tipo -> float
+31: operador_aritmetico -> +
+32: operador_aritmetico -> -
+33: operador_aritmetico -> *
+34: operador_aritmetico -> /
+35: operador_aritmetico -> ^
+36: operador_relacional -> ==
+37: operador_relacional -> <>
+38: operador_relacional -> <
+39: operador_relacional -> >
+40: operador_relacional -> <=
+41: operador_relacional -> >=
+42: estrutura -> comando
+43: estrutura -> bloco

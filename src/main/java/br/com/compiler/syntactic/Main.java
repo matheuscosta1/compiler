@@ -12,7 +12,7 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        String codeFileName = "lexical/codigo2.txt";
+        String codeFileName = "lexical/codigo3.txt";
         String productionsTableFileName = "syntactic/productions.txt";
         String syntacticTableFileName = "syntactic/syntacticTable.txt";
 

@@ -1,0 +1,6 @@
+function meu_programa () { /* teste de comentário */
+    int: idade;
+    char: value;
+
+    abobrinha = 1E9;
+}

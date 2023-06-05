@@ -84,7 +84,6 @@ public class FileHandler {
                 hashMap.put(terminalSymbol, toIntOrNull(nonTerminalSymbol));
                 table.put(head, hashMap);
             } //Mapeia cada linha de símbolos Não terminais com cada coluna de símbolos terminais, gerando um HashMap no formato: A -> (a -> null, b -> 5, c -> null, d -> 6, $ -> null)
-
         }
         syntacticTable.setTable(table);
         return syntacticTable;
