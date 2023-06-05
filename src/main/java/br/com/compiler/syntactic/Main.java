@@ -5,7 +5,6 @@ import br.com.compiler.lexical.LexicalAnalyzer;
 import br.com.compiler.lexical.domain.Characters;
 import br.com.compiler.syntactic.domain.ProductionTable;
 import br.com.compiler.syntactic.domain.SyntacticTable;
-import br.com.compiler.syntactic.domain.Tree;
 import br.com.compiler.syntactic.utils.FileHandler;
 
 import java.io.IOException;
@@ -13,9 +12,9 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        String codeFileName = "lexical/exemploSlide.txt";
-        String productionsTableFileName = "syntactic/productions.csv";
-        String syntacticTableFileName = "syntactic/syntacticTable.csv";
+        String codeFileName = "lexical/codigo2.txt";
+        String productionsTableFileName = "syntactic/productions.txt";
+        String syntacticTableFileName = "syntactic/syntacticTable.txt";
 
         Characters characters = br.com.compiler.lexical.utils.FileHandler.readFile(codeFileName);
 
@@ -36,7 +35,7 @@ public class Main {
         }
 
         System.out.println("Árvore Sintática gerada:\n");
-        syntacticAnalyzer.getTree().printTree("root");
+        syntacticAnalyzer.getTree().printTree("S");
     }
 
 }

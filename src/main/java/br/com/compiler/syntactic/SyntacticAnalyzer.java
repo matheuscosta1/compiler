@@ -20,13 +20,13 @@ public class SyntacticAnalyzer {
     public boolean process(SyntacticTable syntacticTable, ProductionTable productionTable, LexicalAnalyzer lexicalAnalyzer) {
         List<Symbol> productions1 = productionTable.getProductionsByPosition(1);
 
-        Symbol symbol1 = productions1.stream().findFirst().get();
+        Symbol symbol1 = new Symbol("S", "S", false, false);
 
         stack.addLast(symbol1);
 
-        tree = new Tree("root");
+        tree = new Tree("S");
 
-        Token token = lexicalAnalyzer.getTokenMock();
+        Token token = lexicalAnalyzer.getToken();
         Symbol symbol;
         while (!stack.isEmpty()) {
             symbol = stack.getLast();
@@ -53,35 +53,39 @@ public class SyntacticAnalyzer {
 
             System.out.println("\nToken a reconhecer: " + productionTokenName);
 
-            if(symbol.isTerminal()) {
-                if(symbol.getDerivation().equals(productionTokenName)) {
+            if (token.getName() == null) {
+                token = lexicalAnalyzer.getToken();
+            }  else if(symbol.isTerminal()) {
+                if(symbol.getDerivation().equals(token.getName())) {
                     Symbol dequeueSymbol = stack.removeLast();
 
                     System.out.println("\nSimbolo desempilhado: \n");
                     System.out.println(dequeueSymbol);
                     System.out.println("---------------------------------------------------------\n");
-
-                    token = lexicalAnalyzer.getTokenMock();
+                    token = lexicalAnalyzer.getToken();
                 } else {
                     System.out.println("Valor esperado: " + symbol.getDerivation());
                     return false;
                 }
             } else if (symbol.isEmpty()) {
 
-                symbol = stack.removeLast();
+                Symbol dequeueSymbol = stack.removeLast();
 
                 System.out.println("\nSimbolo desempilhado: \n");
-                System.out.println(symbol);
+                System.out.println(dequeueSymbol);
                 System.out.println("---------------------------------------------------------\n");
 
-            } else if (token.getName() == null) {
-                token = lexicalAnalyzer.getTokenMock();
+                if(token.getName().equals(";") && dequeueSymbol.getHead().equals("SEQUENCIA_COMANDOS")) {
+                    token = lexicalAnalyzer.getToken();
+                }
+
             } else {
                 String symbolDerivation = symbol.getDerivation(); //symbolDerivation indica os não terminais na tabela
-                Integer productionDerivation = syntacticTable.getProductionPositionBySymbolDerivationAndToken(symbolDerivation, productionTokenName); //productionTokenName indica a coluna dos terminais na tabela
+                Integer productionDerivation = syntacticTable.getProductionPositionBySymbolDerivationAndToken(symbolDerivation, token.getName()); //productionTokenName indica a coluna dos terminais na tabela
                 if (productionDerivation == null) {
                     System.out.println("Erro: derivação [" + symbol.getDerivation() + "]["+ productionTokenName +"] - " + null);
-                    break;
+                    System.out.println("Token: " + token.getName() + " Linha: " + token.getLine() + " Coluna: " + token.getColumn());
+                    System.exit(1);
                 } else {
                     List<Symbol> productions = productionTable.getProductionsByPosition(productionDerivation);
 
@@ -100,8 +104,13 @@ public class SyntacticAnalyzer {
             }
         }
 
-        token = lexicalAnalyzer.getTokenMock();
+        do {
+            char teste;
+        } while (token.getName() != null);
+
+        token = lexicalAnalyzer.getToken();
 
         return Objects.equals(token.getName(), "$");
+
     }
 }

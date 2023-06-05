@@ -25,7 +25,7 @@ public class FileHandler {
         while ((line = reader.readLine()) != null) {
             Production productions = new Production();
 
-            String[] columns = line.split(",");
+            String[] columns = line.split("#");
 
             Integer productionPosition = Integer.valueOf(columns[0]);
 
@@ -59,7 +59,7 @@ public class FileHandler {
 
         line = reader.readLine(); // lê primeira linha e a ignora
 
-        String[] firstRow = line.split(",");
+        String[] firstRow = line.split("#");
 
         String[] terminalSymbolsWithoutSymbolState = new String[firstRow.length - 1];
         System.arraycopy(firstRow, 1, terminalSymbolsWithoutSymbolState, 0, terminalSymbolsWithoutSymbolState.length); //remove symbol state
@@ -70,7 +70,7 @@ public class FileHandler {
         while ((line = reader.readLine()) != null) {
             HashMap<String, Integer> hashMap = new HashMap<>();
 
-            String[] nonTerminalSymbols = line.split(",");
+            String[] nonTerminalSymbols = line.split("#");
 
             String head = Arrays.asList(nonTerminalSymbols).get(0);
             table.put(head, new HashMap<>());

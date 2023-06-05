@@ -14,9 +14,9 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        String codeFileName = "lexical/exemploSlide.txt";
-        String productionsTableFileName = "syntactic/productions.csv";
-        String syntacticTableFileName = "syntactic/syntacticTable.csv";
+        String codeFileName = "lexical/codigo2.txt";
+        String productionsTableFileName = "syntactic/productions.txt";
+        String syntacticTableFileName = "syntactic/syntacticTable.txt";
 
         Characters characters = br.com.compiler.lexical.utils.FileHandler.readFile(codeFileName);
 
