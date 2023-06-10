@@ -19,7 +19,6 @@ public class Main {
 
         List<Token> tokens = new ArrayList<>();
 
-
         while (true) {
             Token token = lexicalAnalyzer.getToken();
 

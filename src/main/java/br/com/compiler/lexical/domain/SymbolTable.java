@@ -5,6 +5,15 @@ import java.util.Map;
 
 public class SymbolTable { //TODO: na especificacao do trabalho falou sobre prencher tabela de simbolos com tipo do token, lexema, valor e tipo do dado
     private final HashMap<String, Symbol> table = new HashMap<>();
+
+    // identificador = pedro
+    // key = pedro
+    // Symbol {  private String tokenType = identificador
+    //    private String lexeme = pedro
+    //    private String value = pedro
+    //    private String dataType = ''
+    //    private String attribute = 1 }
+
     private Integer position;
 
     public SymbolTable() {

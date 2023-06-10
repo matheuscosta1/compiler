@@ -18,8 +18,6 @@ public class SyntacticAnalyzer {
     }
 
     public boolean process(SyntacticTable syntacticTable, ProductionTable productionTable, LexicalAnalyzer lexicalAnalyzer) {
-        List<Symbol> productions1 = productionTable.getProductionsByPosition(1);
-
         Symbol symbol1 = new Symbol("S", "S", false, false);
 
         stack.addLast(symbol1);
@@ -27,7 +25,9 @@ public class SyntacticAnalyzer {
         tree = new Tree("S");
 
         Token token = lexicalAnalyzer.getToken();
+
         Symbol symbol;
+
         while (!stack.isEmpty()) {
             symbol = stack.getLast();
 
@@ -53,9 +53,9 @@ public class SyntacticAnalyzer {
 
             System.out.println("\nToken a reconhecer: " + productionTokenName);
 
-            if (token.getName() == null) {
+            if (token.getName() == null) { //quando for caracteres inuteis como \n \t, espaço, já peço o próximo token
                 token = lexicalAnalyzer.getToken();
-            }  else if(symbol.isTerminal()) {
+            } else if(symbol.isTerminal()) { // function
                 if(symbol.getDerivation().equals(token.getName())) {
                     Symbol dequeueSymbol = stack.removeLast();
 
@@ -80,8 +80,8 @@ public class SyntacticAnalyzer {
                     token = lexicalAnalyzer.getToken();
                 }
             } else {
-                String symbolDerivation = symbol.getDerivation(); //symbolDerivation indica os não terminais na tabela
-                Integer productionDerivation = syntacticTable.getProductionPositionBySymbolDerivationAndToken(symbolDerivation, token.getName()); //productionTokenName indica a coluna dos terminais na tabela
+                String symbolDerivation = symbol.getDerivation(); //symbolDerivation indica os não terminais na tabela // S
+                Integer productionDerivation = syntacticTable.getProductionPositionBySymbolDerivationAndToken(symbolDerivation, token.getName()); //productionTokenName indica a coluna dos terminais na tabela //function
                 if (productionDerivation == null) {
                     System.out.println("Erro: derivação [" + symbol.getDerivation() + "]["+ token.getName() +"] - " + null);
                     System.out.println("Token: " + token.getName() + " Linha: " + token.getLine() + " Coluna: " + token.getColumn());
@@ -100,6 +100,8 @@ public class SyntacticAnalyzer {
                     System.out.println("---------------------------------------------------------\n");
 
                     productions.forEach(stack::addLast);
+
+                    System.out.println("abobrinha");
                 }
             }
         }

@@ -66,7 +66,6 @@ public class FileHandler {
 
         HashMap<String, HashMap<String, Integer>> table = new HashMap<>();
 
-
         while ((line = reader.readLine()) != null) {
             HashMap<String, Integer> hashMap = new HashMap<>();
 
@@ -75,15 +74,15 @@ public class FileHandler {
             String head = Arrays.asList(nonTerminalSymbols).get(0);
             table.put(head, new HashMap<>());
 
-            String[] nonTerminalSymbolsWithoutHead = new String[nonTerminalSymbols.length - 1];
-            System.arraycopy(nonTerminalSymbols, 1, nonTerminalSymbolsWithoutHead, 0, nonTerminalSymbolsWithoutHead.length); //remove head non terminal symbol. Ex.: S. Sobra apenas as colunas referentes às posicoes na tabela de producoes
+            String[] productionNumbers = new String[nonTerminalSymbols.length - 1];
+            System.arraycopy(nonTerminalSymbols, 1, productionNumbers, 0, productionNumbers.length); //remove head non terminal symbol. Ex.: S. Sobra apenas as colunas referentes às posicoes na tabela de producoes
 
             for (int iterator = 0; iterator < terminalSymbolsWithoutSymbolState.length; iterator++) {
-                String nonTerminalSymbol = Arrays.asList(nonTerminalSymbolsWithoutHead).get(iterator);
+                String productionNumber = Arrays.asList(productionNumbers).get(iterator);
                 String terminalSymbol = Arrays.asList(terminalSymbolsWithoutSymbolState).get(iterator);
-                hashMap.put(terminalSymbol, toIntOrNull(nonTerminalSymbol));
-                table.put(head, hashMap);
+                hashMap.put(terminalSymbol, toIntOrNull(productionNumber));
             } //Mapeia cada linha de símbolos Não terminais com cada coluna de símbolos terminais, gerando um HashMap no formato: A -> (a -> null, b -> 5, c -> null, d -> 6, $ -> null)
+            table.put(head, hashMap);
         }
         syntacticTable.setTable(table);
         return syntacticTable;

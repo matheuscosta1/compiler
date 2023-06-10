@@ -23,7 +23,7 @@ public class Characters {
             return characters.get(nextElementIndex++);
         }
         setLookAhead(false); //se não cair no if de cima quer dizer que está em lookahead, só que o próximo token deve continuar normal, pegando o próximo caracter então lookahead volta pra false
-        return characters.get(nextElementIndex -1);
+        return characters.get(nextElementIndex - 1);
     }
 
     public boolean isLookAhead() {

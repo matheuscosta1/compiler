@@ -79,7 +79,7 @@ public class Tree {
 
         if (!children.isEmpty()) {
             Tree lastChild = children.get(children.size() - 1);
-            printTree(lastChild, prefix + (isLast ? "    " : "│   "), true);
+            printTree(lastChild, prefix + (isLast ? "    " : "│   "), false);
         }
     }
 }

@@ -6,6 +6,14 @@ public class Symbol {
     private boolean isTerminal;
     private boolean isEmpty;
 
+    // S -> B A function
+    // S -> _
+    // S { head: S derivation: S isTerminal: false isEmpty: false
+    // B head: S derivation: B isTerminal: false isEmpty: false
+    // function head: S derivation: function isTerminal: true isEmpty: false
+    // _ head: S derivation: _ isTerminal: false isEmpty: true
+    // }
+
     public Symbol() {
     }
 
